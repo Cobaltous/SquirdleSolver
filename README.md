@@ -6,7 +6,7 @@ This program scrapes data from PokemonDB and uses that information to solve game
 
 Source code is available but is spaghettified and uncommented as of writing - read at your own risk.
 
-Also comes with a tester that runs simulations for all 'mons that exist, but it isn't very verbose as of yet.
+Also comes with a tester (SSTest, which runs SSTester - (I know)) that runs simulations for all 'mons that exist, but it isn't very verbose as of yet.
 
 
 Squirdle: https://squirdle.fireblend.com/
