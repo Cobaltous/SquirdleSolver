@@ -1,4 +1,5 @@
 import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -6,6 +7,7 @@ import java.util.LinkedList;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -18,32 +20,44 @@ public class SolverUI {
 	
 	SquirdleSolver solver;
 	JFrame appFrame;
-	JPanel gbgPanel, feedbackPanel, miscPanel;
+	FlowLayout flow;
+	JPanel /*layoutContainerPanel,*/ gbgPanel, feedbackPanel, miscPanel, manualEntryPanel;
 	JButton gbgButton, feedbackButton, resetButton;
-	JComboBox<String> gen, type1, type2, height, weight;
+	JCheckBox manualEntryCheck;
+	JComboBox<String> gen, type1, type2, height, weight, manualEntryBox;
 	LinkedList<JComboBox<String>> boxes; 
-//	JMenuItem higher, lower, correct, incorrect, swap;
 	JLabel bgLabel, guessesLeftLabel;
 	
-	Pokemon bestGuess;
+	Pokemon bestGuess, manualGuess;
 	
 	int guessesLeft = 8;
 	
 	public SolverUI() {
 		solver = new SquirdleSolver(null);
+
+		flow = new FlowLayout();
 		
 		appFrame = new JFrame();
 		
-		gbgPanel = new JPanel();		
+//		layoutContainerPanel = new JPanel();
+//		layoutContainerPanel.setLayout(flow);
+//      flow.setAlignment(FlowLayout.TRAILING);
+		
+		gbgPanel = new JPanel();
 		feedbackPanel = new JPanel();
 		miscPanel = new JPanel();
+		manualEntryPanel = new JPanel();
 		
 //		JPanel panel = new JPanel();
-		gbgPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-		gbgPanel.setLayout(new GridLayout(2, 1));
+//		gbgPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+		gbgPanel.setBorder(BorderFactory.createBevelBorder(0));
+//		gbgPanel.setLayout(new GridLayout(2, 1));
+//		gbgPanel.setLayout(new GridLayout(2, 4));
+		feedbackPanel.setBorder(BorderFactory.createBevelBorder(0));
+		manualEntryPanel.setBorder(BorderFactory.createBevelBorder(0));
+		miscPanel.setBorder(BorderFactory.createBevelBorder(0));
 		
 		gbgButton = new JButton("Get Best Guess");
-		
 
 		//I *think* you can do an anonymous function here because
 		//ActionListener is an interface
@@ -52,19 +66,17 @@ public class SolverUI {
 				bestGuess = solver.getBestGuess();
 				switch(solver.candidatesLeft) {
 					case 1:
-						bgLabel.setText("Final Guess: " + bestGuess.name + (bestGuess.form.equals("None") ? "" : (" - " + bestGuess.form)));
+						bgLabel.setText("Final " + getGuessState().split(" ", 2)[1]);
 						break;
 					case 0:
-						bgLabel.setText("Final Guess: I dunno man, I think you broke it. There's nothing left.");
-						feedbackButton.setEnabled(true);
+						bgLabel.setText("I dunno man, I think you broke it. There's nothing left.");
 						break;
 					default:
 						bgLabel.setText("Best Guess: " + bestGuess.name + (bestGuess.form.equals("None") ? "" : (" - " + bestGuess.form)));
 						feedbackButton.setEnabled(true);
-						
-						
 				}
 				gbgButton.setEnabled(false);
+				manualEntryCheck.setSelected(false);
 			}
 		});
 		
@@ -97,39 +109,30 @@ public class SolverUI {
 							sb.append('S');
 					}
 				}
-//				for(Component c : feedbackPanel.getComponents()) {
-//					if(c instanceof JComboBox) {
-//						String item = (String)((JComboBox<String>)c).getSelectedItem();
-//						switch(item) {
-//							case "✖":
-//								sb.append("I");
-//								break;
-//								
-//							case "↑":
-//								sb.append('H');
-//								break;
-//								
-//							case "↓":
-//								sb.append('L');
-//								break;
-//								
-//							case "✔":
-//								sb.append('C');
-//								break;
-//								
-//							case "⇆":
-//								sb.append('S');
-//						}
-//					}
-//				}
+				//Here so I can still use the tester to check for names, too.
 				sb.append('X');
+				if(manualEntryCheck.isSelected()) {
+					solver.setManualGuess(manualEntryBox.getSelectedIndex());
+				}
 				solver.pruneMaps(sb.toString());
 				
 				--guessesLeft;
 				guessesLeftLabel.setText(getGuesses());
 
-				gbgButton.setEnabled(true);
-				feedbackButton.setEnabled(false);
+				if(guessesLeft == 0 || solver.candidatesLeft == 1) {
+					gbgButton.setEnabled(false);
+					feedbackButton.setEnabled(false);
+					manualEntryBox.setEnabled(false);
+					bgLabel.setText("Final " + getGuessState().split(" ", 2)[1]);
+				}
+				else {
+					gbgButton.setEnabled(true);
+					feedbackButton.setEnabled(false);
+					
+					bestGuess = null;
+					bgLabel.setText("Best Guess:");
+				}
+				manualEntryCheck.setSelected(false);
 //				feedbackButton.setText(sb.toString());;
 			}
 		});
@@ -141,6 +144,7 @@ public class SolverUI {
 //		swap = new JMenuItem("⇆");
 		
 		
+//		https://docs.oracle.com/javase/tutorial/uiswing/components/button.html
 //		https://docs.oracle.com/javase/tutorial/uiswing/components/combobox.html
 		gen = new JComboBox<String>(numDropOps);
 //		gen.setSelectedIndex(1);
@@ -172,16 +176,35 @@ public class SolverUI {
 		resetButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				bgLabel.setText("Best Guess:");
-				solver.initializeMaps();
+
+				
+				guessesLeft = 8;
+				guessesLeftLabel.setText(getGuesses());
+				
 
 				feedbackButton.setEnabled(false);
 				gbgButton.setEnabled(true);
+				manualEntryBox.setEnabled(true);
+				manualEntryCheck.setEnabled(true);
+				manualEntryCheck.setSelected(false);
+				
+				for(JComboBox<String> box : boxes) {
+					box.setSelectedIndex(0);
+				}
+				
+				bestGuess = null;
+				
+				solver.initializeMaps();
 			}
 		});
 		
-		
+
+		gbgPanel.add(guessesLeftLabel);
 		gbgPanel.add(gbgButton);
 		gbgPanel.add(bgLabel);
+		
+
+//		feedbackPanel.setLayout(new GridLayout(2, 6));
 
 		feedbackPanel.add(gen);
 		feedbackPanel.add(type1);
@@ -192,9 +215,42 @@ public class SolverUI {
 		
 		miscPanel.add(resetButton, BorderLayout.CENTER);
 		
+		manualEntryBox = new JComboBox<String>(solver.getDexArray());
+		
+		
+		manualEntryCheck = new JCheckBox();
+		manualEntryCheck.setText("Manually enter a guess?");
+		manualEntryCheck.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				gbgButton.setEnabled(!manualEntryCheck.isSelected() && bestGuess == null);
+				solver.setManualGuess(manualEntryBox.getSelectedIndex());
+				manualGuess = solver.getMonAtIndex(manualEntryBox.getSelectedIndex());
+				bgLabel.setText(getGuessState());
+				feedbackButton.setEnabled(manualEntryCheck.isSelected() ||  bestGuess != null);
+			}
+		});
+		
+		manualEntryBox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(manualEntryCheck.isSelected()) {
+					manualGuess = solver.getMonAtIndex(manualEntryBox.getSelectedIndex());
+					bgLabel.setText(getGuessState());
+				}
+			}
+		});
+		
+		manualEntryPanel.setLayout(new GridLayout(1, 2));
+		manualEntryPanel.add(manualEntryBox);
+		manualEntryPanel.add(manualEntryCheck);
+		
+		
+		
 		appFrame.add(gbgPanel, BorderLayout.NORTH);
 		appFrame.add(feedbackPanel, BorderLayout.CENTER);
 		appFrame.add(miscPanel, BorderLayout.SOUTH);
+		appFrame.add(manualEntryPanel, BorderLayout.EAST);
+		
+		
 		
 		appFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		appFrame.setTitle("Squirdle Solver");
@@ -205,6 +261,12 @@ public class SolverUI {
 	
 	String getGuesses() {
 		return ("Guesses left: " + guessesLeft);
+	}
+	
+	String getGuessState() {
+		return manualEntryCheck.isSelected() ?
+				("Manual Guess: " + manualGuess.name + (manualGuess.form.equals("None") ? "" : (" - " + manualGuess.form))) :
+					("Best Guess: " + (bestGuess == null ? "" : (bestGuess.name + (bestGuess.form.equals("None") ? "" : (" - " + bestGuess.form)))));
 	}
 
 	public static void main(String[] args) {

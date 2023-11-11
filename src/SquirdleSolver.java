@@ -165,6 +165,22 @@ public class SquirdleSolver
 		return candidatesLeft;
 	}
 	
+	String[] getDexArray() {
+		String[] dexNames = new String[natDex.size()];
+		Pokemon mon;
+		for(int i = 0; i < natDex.size(); ++i) {
+			mon = natDex.get(i);
+			dexNames[i] = mon.name + (mon.form.equals("None") ? "" : (" - " + mon.form));
+		}
+		return dexNames;
+	}
+	
+	int setManualGuess(int i) {
+		int hold = bestGuessIndex;
+		bestGuessIndex = i;
+		return hold;
+	}
+	
 	void setLogWriter(FileWriter logWriter) {
 		this.logWriter = logWriter;
 		verbose = logWriter == null ? false : true;

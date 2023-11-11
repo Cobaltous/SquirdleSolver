@@ -115,7 +115,7 @@ public class SSTester {
 		}
 		
 		int typeCheck = 0;
-		if(monToGuess.type1.equals(bestGuess.type2)) {
+		if(monToGuess.type2.equals(bestGuess.type1)) {
 			typeCheck = 1;
 		}
 		else if(!monToGuess.type1.equals(bestGuess.type1)) {
@@ -134,7 +134,7 @@ public class SSTester {
 		}
 		
 		typeCheck = 0;
-		if(monToGuess.type2.equals(bestGuess.type1)) {
+		if(monToGuess.type1.equals(bestGuess.type2)) {
 			typeCheck = 1;
 		}
 		else if(!monToGuess.type2.equals(bestGuess.type2)) {

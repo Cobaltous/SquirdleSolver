@@ -46,7 +46,8 @@ public class PokemonDBScraper {
 
 //			Document page = Jsoup.parse(new File("Size Pokédex_ List of Pokémon by height and weight _ Pokémon Database.html"));
 		try {
-			Document page = Jsoup.parse(new URL(url), 10000);Element table = page.selectFirst("tbody");
+			Document page = Jsoup.parse(new URL(url), 10000);
+			Element table = page.selectFirst("tbody");
 			
 			Elements types;
 			int dexNo = 0, gen = 0;

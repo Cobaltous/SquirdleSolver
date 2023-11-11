@@ -153,6 +153,15 @@ public class NationalDex {
 		
 		HashMap<String, ArrayList<Integer>> clone = cloneMap(monsByType);
 		
+		if(verbose) {
+			try {
+				logWriter.write(String.format("Last guess result: %s\n", guessResult));
+			}
+			catch(IOException e) {
+				System.err.println("Could not write guess result to log.");
+			}
+		}
+		
 		//Compare against bestGuess
 		for(Object key : clone.keySet()) {
 			for(Integer i : clone.get(key)) {
@@ -187,7 +196,7 @@ public class NationalDex {
 							break;
 
 						case 'S':
-							if(!mon.type1.equals(lastGuess.type2)) {
+							if(!mon.type2.equals(lastGuess.type1)) {
 								throw new Exception(String.format("Type1 S; (%d) %s's type 1 %s !=  %s's type 2 %s \n", i, mon.name, mon.type2, lastGuess.name, lastGuess.type1));
 							}
 							break;
@@ -207,7 +216,7 @@ public class NationalDex {
 							break;
 							
 						case 'S':
-							if(!mon.type2.equals(lastGuess.type1)) {
+							if(!mon.type1.equals(lastGuess.type2)) {
 								throw new Exception(String.format("Type2 S; (%d) %s's type 2 %s !=  %s's type 1 %s \n", i, mon.name, mon.type2, lastGuess.name, lastGuess.type1));
 							}
 							break;
