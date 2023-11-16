@@ -2,11 +2,9 @@
 A program that is built to solve "Squirdle", a Pokemon-themed Wordle offshoot done by Fireblend. Built with jsoup and Swing.
 
 
-This program scrapes data from PokemonDB and uses that information to solve games of Squirdle. To make guesses, it uses a formula to determine the information entropy of any given 'mon choice (with some extra contextual weighting) to determine a best guess for any given state of the game. Comes with a (still barebones) UI made with Java Swing for user convenience, and also comes with a prebuilt runnable .jar file.
+This program scrapes data from PokemonDB and uses that information to solve games of Squirdle. To make guesses, it uses a formula to determine the information entropy of any given 'mon choice (with some extra contextual weighting) to determine a best guess for any given state of the game. In addition, there is a testing program that runs game simulations by itself to assure that all Pokemon can be guessed via the solver's guesses. Both the solver and tester come with a UI made with Java Swing for user convenience, and both have been packaged into included prebuilt runnable .jar files.
 
-Source code is available but is spaghettified and uncommented as of writing - read at your own risk.
-
-Also comes with a tester (SSTest, which runs SSTester - (I know)) that runs simulations for all 'mons that exist, but it isn't very verbose as of yet.
+Source code is available but is uncommented as of writing - read at your own risk.
 
 Should be able to solve a game if its best guesses are used exclusively and hopefully patch up a game where manual guesses/misinputs are entered.
 
