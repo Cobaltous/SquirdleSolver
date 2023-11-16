@@ -17,4 +17,4 @@ jsoup Homepage: https://jsoup.org/
 
 
 
-Created to get myself familiar with both libaries and to have something else hosted here.
+Created to get myself familiar with both the jsoup and Swing libaries and to have something else hosted here.
