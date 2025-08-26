@@ -40,8 +40,7 @@ public class SSTesterUI {
 	DoubleComparator dComp = new DoubleComparator();
 	Pokemon monToGuess, bestGuess, hardestGuess;
 	
-	Task updateTask;
-	
+	Task updateTask;	
 	
 	public static void main(String[] args) {
 		app = new SSTesterUI();
@@ -301,10 +300,6 @@ public class SSTesterUI {
 				if(verbose) {
 					testLogWriter = new FileWriter(outFolder + "overallLog.txt");
 					setSolverTestLogWriter();
-					if(extremeDetail) {
-						monLogWriter = new FileWriter("dummy");
-//						setSolverMonLogWriter();
-					}
 				}
 				
 				for(processIndex = 0; processIndex < getDexSize() ; ++processIndex) {

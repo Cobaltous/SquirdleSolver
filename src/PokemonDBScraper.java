@@ -94,7 +94,7 @@ public class PokemonDBScraper {
 				monE = table.child(i);
 				gen = -1;
 				try {
-					dexNo = Integer.parseInt(monE.child(0).select("span").get(1).html());
+					dexNo = Integer.parseInt(monE.child(0).select("span").get(0).html());
 					nameField = monE.child(1).selectFirst("a");
 					name = nameField.html();
 					if(monE.child(1).selectFirst("small") != null) {

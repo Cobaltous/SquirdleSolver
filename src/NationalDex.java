@@ -13,7 +13,7 @@ public class NationalDex {
 		Boolean used to indicate when the user wants to have logs
 		written that pertain to each individual Pokemon that is
 		the solution to each Squirdle game. Only ever able to be
-		modified via the ttester's UI, as it's for testing.
+		modified via the tester's UI, as it's for... testing.
 	*/
 	boolean extremeDetail = false;
 
@@ -190,6 +190,14 @@ public class NationalDex {
 									lastGuess.getTitle(),
 									lastGuess.type1));
 							}
+							else if(mon.type2.equals(lastGuess.type1)) {
+								throw new Exception(String.format("Type1 ✖; (%d) %s's type 2 %s ==  %s's type 1 %s \n",
+									i,
+									mon.getTitle(),
+									mon.type1,
+									lastGuess.getTitle(),
+									lastGuess.type2));
+							}
 							break;
 
 						case '⇆':
@@ -218,18 +226,18 @@ public class NationalDex {
 					switch(guessResult.charAt(2)) {
 						case '✖':
 							if(mon.type2.equals(lastGuess.type2)) {
-								throw new Exception(String.format("Type2 ✖; (%d) %s's type 1 %s !=  %s's type 2 %s \n",
-									i,
-									mon.getTitle(),
-									mon.type1,
-									lastGuess.getTitle(),
-									lastGuess.type1));
+									throw new Exception(String.format("Type2 ✖; (%d) %s's type 2 %s ==  %s's type 2 %s \n",
+										i,
+										mon.getTitle(),
+										mon.type1,
+										lastGuess.getTitle(),
+										lastGuess.type1));
 							}
 							break;
 							
 						case '⇆':
 							if(!mon.type1.equals(lastGuess.type2)) {
-								throw new Exception(String.format("Type2 ⇆; (%d) %s's type 2 %s !=  %s's type 1 %s \n",
+								throw new Exception(String.format("Type2 ⇆; (%d) %s's type 2 %s ==  %s's type 1 %s \n",
 										i,
 										mon.getTitle(),
 										mon.type2,
@@ -240,7 +248,7 @@ public class NationalDex {
 							
 						case '✔':
 							if(!mon.type2.equals(lastGuess.type2)) {
-								throw new Exception(String.format("Type2 ✔; (%d) %s's type 2 %s ==  %s's type 2 %s \n",
+								throw new Exception(String.format("Type2 ✔; (%d) %s's type 2 %s !=  %s's type 2 %s \n",
 									i,
 									mon.getTitle(),
 									mon.type1,

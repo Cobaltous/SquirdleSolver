@@ -87,7 +87,7 @@ public class SquirdleSolverUI {
 			public void actionPerformed(ActionEvent e) {
 				StringBuilder sb = new StringBuilder();
 				for(JComboBox<String> box : boxes) {
-					switch((Character)box.getSelectedItem()) {
+					switch(box.getSelectedItem().toString().charAt(0)) {
 						case '✖':
 							sb.append('✖');
 							break;
